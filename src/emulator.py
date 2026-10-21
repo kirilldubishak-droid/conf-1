@@ -5,12 +5,15 @@ from tkinter import scrolledtext
 
 
 def expand_vars(text):
+    """Подставляет значения переменных окружения вида $ИМЯ."""
     def repl(m):
+        """Замена одного совпадения $ИМЯ на значение."""
         return os.environ.get(m.group(1), m.group(0))
     return re.sub(r"\$(\w+)", repl, text)
 
 
 def parse_line(line):
+    """Разбирает строку на команду и список аргументов."""
     line = expand_vars(line.strip())
     if not line:
         return None, []
@@ -20,6 +23,7 @@ def parse_line(line):
 
 class ShellEmulator:
     def __init__(self):
+        """Создаёт окно эмулятора и виджеты."""
         self.vfs_name = "VFS"
         self.root = tk.Tk()
         self.root.title(f"VFS")
@@ -37,12 +41,14 @@ class ShellEmulator:
         self.write("Команды: ls, cd, exit\n\n")
 
     def write(self, text):
+        """Печатает текст в окно вывода."""
         self.output.config(state="normal")
         self.output.insert(tk.END, text)
         self.output.see(tk.END)
         self.output.config(state="disabled")
 
     def on_enter(self, event=None):
+        """Обработчик Enter: читает строку и выполняет команду."""
         line = self.entry.get()
         self.entry.delete(0, tk.END)
         if not line.strip():
@@ -54,6 +60,7 @@ class ShellEmulator:
         self.run_cmd(cmd, args)
 
     def run_cmd(self, cmd, args):
+        """Выполняет одну команду эмулятора."""
         if cmd == "exit":
             self.root.destroy()
         elif cmd == "ls":
@@ -67,6 +74,7 @@ class ShellEmulator:
             self.write(f"Ошибка: нет команды '{cmd}'\n")
 
     def run(self):
+        """Запускает главный цикл окна."""
         self.root.mainloop()
 
 
