@@ -28,6 +28,7 @@ def expand_vars(text):
     }
 
     def repl(m):
+        """Замена одного совпадения $ИМЯ на значение."""
         name = m.group(1)
         if name in aliases and aliases[name]:
             return aliases[name]
@@ -84,6 +85,7 @@ class ShellEmulator:
 
     def __init__(self, vfs_path=None, prompt="$ ",
                  start_script=None):
+        """Создаёт окно, грузит VFS и выполняет стартовый скрипт."""
         self.prompt = prompt or "$ "
         self.start_script = start_script
         self.vfs = VFS()
