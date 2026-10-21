@@ -10,6 +10,7 @@ class VFSNode:
 
     def __init__(self, name, is_dir=False, content="",
                  owner="user", permissions="644"):
+        """Создаёт узел файла или каталога."""
         self.name = name
         self.is_dir = is_dir
         self.content = content
@@ -22,6 +23,7 @@ class VFS:
     """VFS в памяти, источник — CSV."""
 
     def __init__(self):
+        """Создаёт пустую виртуальную файловую систему."""
         self.root = VFSNode(
             "/", is_dir=True, owner="root",
             permissions="755"
@@ -181,6 +183,7 @@ class VFS:
             raise FileNotFoundError(start_path)
 
         def walk(node, current):
+            """Обходит дерево и собирает совпадения по имени."""
             if name is None or node.name == name:
                 results.append(current if current else "/")
             if node.is_dir:
