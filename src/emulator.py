@@ -28,6 +28,7 @@ def expand_vars(text):
     }
 
     def repl(m):
+        """Замена одного совпадения $ИМЯ на значение."""
         name = m.group(1)
         if name in aliases and aliases[name]:
             return aliases[name]
@@ -82,6 +83,7 @@ class ShellEmulator:
 
     def __init__(self, vfs_path=None, prompt="$ ",
                  start_script=None):
+        """Создаёт окно, грузит VFS и выполняет стартовый скрипт."""
         self.prompt = prompt or "$ "
         self.start_script = start_script
         self.vfs = VFS()
@@ -128,12 +130,14 @@ class ShellEmulator:
         self.entry.focus()
 
     def write(self, text):
+        """Печатает текст в окно вывода."""
         self.output.config(state="normal")
         self.output.insert(tk.END, text)
         self.output.see(tk.END)
         self.output.config(state="disabled")
 
     def on_enter(self, event=None):
+        """Обработчик Enter: читает строку и выполняет команду."""
         line = self.entry.get()
         self.entry.delete(0, tk.END)
         if not line.strip():
@@ -145,6 +149,7 @@ class ShellEmulator:
         self.run_cmd(cmd, args)
 
     def run_cmd(self, cmd, args):
+        """Выполняет одну команду эмулятора."""
         if cmd == "exit":
             self.root.destroy()
         elif cmd == "ls":
@@ -182,10 +187,12 @@ class ShellEmulator:
         self.write("=== Конец скрипта ===\n\n")
 
     def run(self):
+        """Запускает главный цикл окна."""
         self.root.mainloop()
 
 
 def main():
+    """Точка входа: разбирает параметры и запускает эмулятор."""
     args = parse_args()
     print("=== Параметры запуска ===")
     print(f"  --vfs    = {args.vfs}")
